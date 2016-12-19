@@ -6,61 +6,55 @@
 /*   By: dzheng <dzheng@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:23:08 by dzheng            #+#    #+#             */
-/*   Updated: 2016/12/15 18:09:16 by dzheng           ###   ########.fr       */
+/*   Updated: 2016/12/19 14:39:44 by dzheng           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-int					get_next_line(const int fd/*, char **line*/)
+int					get_next_line(const int fd, char **line)
 {
 	int 			ret;
-//	static char 	*save;
-//	size_t 			i;
-	char 			buf[BUFF_SIZE + 1];
+	char 			*save;
+	char			buf[BUFF_SIZE + 1];
+	static char		*tmp;
+	int 			i;
 
-//	position = 0;
-	ret = 1;
-	while (ret)
+	i = 0;
+	save = NULL;
+	if (tmp != NULL)
+		save = &tmp[1];
+	if (save == NULL)
+		save = (char *)malloc(sizeof(char));
+	while ((ret = read(fd, buf, BUFF_SIZE))) //PENDANT LA LECTURE
 	{
-		ret = read(fd, buf, BUFF_SIZE);
 		buf[ret] = '\0';
-		ft_putstr(buf);
-/*		if (ret == 0)
+		save = ft_strjoin(save, buf); //LINK BUF AND SAVE -- SAVE || BUF
+		if (ft_strchr(save, '\n') != NULL) //SAVE = /n....
 		{
-			ft_putstr("end of file");
-			return (0);
-		}
-		else
-		{
-			buf[ret - 1] = '\0';
-			while (buf[position] != '\0')
+			tmp = ft_strchr(save, '\n'); //TMP = \n to the rest of the text
+			while (save[i])
 			{
-				ft_putstr(buf);
-				if (buf[position] == '\n')
-				{
-					buf[position] = '\0';
-					save = ft_strjoin(save, buf);
-					ft_putstr(save);
-					return (1);
-				}
-				position++;
+				if (save[i] == '\n')
+					save[i] = '\0';
+				i++;
 			}
+			*line = save;
+			return (1);
 		}
-*/	}
+	}
+	if (ret == -1)
+		return (-1);
 	return (0);
 }
 
 int				main(int ac, char *av[])
 {
-	int 		i;
 	int 		fd;
-/*	char 		**line;*/
+	char		*line;
 
-
-	i = 0;
-	fd = 0;
-	/*line = NULL;*/
+	line = NULL;
 	if (ac != 2)
 	{
 		ft_putstr("usage: get next line input\n");
@@ -73,7 +67,21 @@ int				main(int ac, char *av[])
 			ft_putstr("open error");
 			return (1);
 		}
-		i = get_next_line(fd/*, line*/);
+		get_next_line(fd, &line);
+		ft_putstr(line);
+		ft_putchar('\n');
+		get_next_line(fd, &line);
+		ft_putstr(line);
+		ft_putchar('\n');
+		get_next_line(fd, &line);
+		ft_putstr(line);
+		ft_putchar('\n');
+		get_next_line(fd, &line);
+		ft_putstr(line);
+		ft_putchar('\n');
+		get_next_line(fd, &line);
+		ft_putstr(line);
+		ft_putchar('\n');
 		if (close(fd) == -1)
 		{
 			ft_putstr("close error");
@@ -82,5 +90,3 @@ int				main(int ac, char *av[])
 	}
 	return (0);
 }
-
-//		write(1, "b\n", 2);//		write(1, "b\n", 2);

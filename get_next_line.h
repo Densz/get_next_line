@@ -6,7 +6,7 @@
 /*   By: dzheng <dzheng@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:23:20 by dzheng            #+#    #+#             */
-/*   Updated: 2016/12/15 18:09:16 by dzheng           ###   ########.fr       */
+/*   Updated: 2016/12/19 14:29:42 by dzheng           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@
 
 # define BUFF_SIZE 10
 
-int			get_next_line(const int fd/*, char **line*/);
+int			get_next_line(const int fd, char **line);
 
 #endif
