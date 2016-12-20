@@ -18,10 +18,10 @@ FLAGS = -Wall -Wextra -Werror
 SRCS = get_next_line.c
 
 #COLORS
-C_GOOD			=	"\033[32m"
+C_GOOD			=	"\x1b[32m"
 
 #MESSAGE
-SUCCESS			=	$(C_GOOD)SUCCESS$
+SUCCESS			=	$(C_GOOD)SUCCESS"\x1b[0m"
 
 all: $(NAME)
 
