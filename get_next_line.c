@@ -6,74 +6,69 @@
 /*   By: dzheng <dzheng@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:23:08 by dzheng            #+#    #+#             */
-/*   Updated: 2016/12/20 11:34:33 by dzheng           ###   ########.fr       */
+/*   Updated: 2016/12/20 17:45:18 by dzheng           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
+int 				checkendofline(char **save, char **line)
+{
+	char 	*tmp;
+	int 	i;
+
+	i = 0;
+	tmp = NULL;
+	if (*save)
+	{	
+		if (ft_strchr(*save, '\n') != NULL) 
+		{
+			tmp = ft_strchr(*save, '\n');
+			*tmp = '\0';
+			while (save[i])
+			{
+				if (*save[i] == '\n')
+					*save[i] = '\0';
+				i++;
+			}
+			*line = ft_strdup(*save);
+			*save = ft_strdup(&tmp[1]);
+			tmp = NULL;
+			free (tmp);
+			return (1);
+		}
+	}
+	return (0);
+}
+
 int					get_next_line(const int fd, char **line)
 {
 	int 			ret;
-	char 			*save;
 	char			buf[BUFF_SIZE + 1];
-	static char		*tmp = NULL;
-	int 			i;
+	static char		*save;
 
-	i = 0;
-	save = NULL;
-	if (tmp)
-	{
-		save = ft_strdup(&tmp[1]);
-		if (ft_strchr(save, '\n') != NULL) 
-		{
-			tmp = ft_strchr(save, '\n');
-			*tmp = '\0';
-			printf("\x1b[31m--Tmp 38 =\x1b[0m");
-			printf("\x1b[31m%s\x1b[0m\n", tmp);
-			while (save[i])
-			{
-				if (save[i] == '\n')
-					save[i] = '\0';
-				i++;
-			}
-			printf("\x1b[33m--Save 43 =\n%s\n\x1b[0m", save);
-			*line = ft_strdup(save);
-			free (save);
-			return (1);
-		}
-	}
-	if (save == NULL)
-		save = (char *)malloc(sizeof(char));
-	printf("\x1b[33m--Save 28 =\n%s\n\x1b[0m", save);
-	i = 0;
+	if (checkendofline(&save, line))
+		return (1);
+	if (!save)
+		save = ft_strnew(0);
 	while ((ret = read(fd, buf, BUFF_SIZE)))
 	{
+		if (fd == -1)
+			return (-1);
 		buf[ret] = '\0';
 		save = ft_strjoin(save, buf);
-		if (ft_strchr(save, '\n') != NULL) 
-		{
-			tmp = ft_strchr(save, '\n');
-			*tmp = '\0';// WHYYYYYY DOES IT WORK WITH THIS?????
-			printf("\x1b[31m--Tmp 38 =\x1b[0m");
-			printf("\x1b[31m%s\x1b[0m\n", tmp);
-			while (save[i])
-			{
-				if (save[i] == '\n')
-					save[i] = '\0';
-				i++;
-			}
-			printf("\x1b[33m--Save 43 =\n%s\n\x1b[0m", save);
-			*line = ft_strdup(save);
-			free (save);
+		if (checkendofline(&save, line))
 			return (1);
-		}
 	}
-	*line = ft_strdup(save);
-	free (save);
-	if (ret == -1)
-		return (-1);
+	if (save)
+	{
+		*line = ft_strdup(save);
+		if (ft_strlen(save) == 0)
+			return (0);
+		save = NULL;
+		return (1);
+	}
 	return (0);
 }
 
@@ -97,12 +92,10 @@ int				main(int ac, char *av[])
 			ft_putstr("open error");
 			return (1);
 		}
-		while (i < 6)
+		while (i < 20)
 		{
-			printf("-------------TEST n %i-------------\n", i + 1);
 			get_next_line(fd, &line);
-			printf("\x1b[32m--LINE\n%s\n\x1b[0m", line);
-			ft_putchar('\n');
+			printf("\x1b[32m%s\n\x1b[0m", line);
 			i++;
 		}
 		if (close(fd) == -1)

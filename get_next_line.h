@@ -6,7 +6,7 @@
 /*   By: dzheng <dzheng@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:23:20 by dzheng            #+#    #+#             */
-/*   Updated: 2016/12/20 11:34:19 by dzheng           ###   ########.fr       */
+/*   Updated: 2016/12/20 16:51:01 by dzheng           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "libft/libft.h"
 # include <string.h>
 
-# define BUFF_SIZE 10
+# define BUFF_SIZE 1
 
 int			get_next_line(const int fd, char **line);
 
