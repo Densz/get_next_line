@@ -6,23 +6,23 @@
 /*   By: dzheng <dzheng@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/14 19:23:08 by dzheng            #+#    #+#             */
-/*   Updated: 2016/12/20 17:45:18 by dzheng           ###   ########.fr       */
+/*   Updated: 2016/12/20 17:49:05 by dzheng           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-int 				checkendofline(char **save, char **line)
+int				checkendofline(char **save, char **line)
 {
-	char 	*tmp;
-	int 	i;
+	char		*tmp;
+	int			i;
 
 	i = 0;
 	tmp = NULL;
 	if (*save)
-	{	
-		if (ft_strchr(*save, '\n') != NULL) 
+	{
+		if (ft_strchr(*save, '\n') != NULL)
 		{
 			tmp = ft_strchr(*save, '\n');
 			*tmp = '\0';
@@ -35,18 +35,18 @@ int 				checkendofline(char **save, char **line)
 			*line = ft_strdup(*save);
 			*save = ft_strdup(&tmp[1]);
 			tmp = NULL;
-			free (tmp);
+			free(tmp);
 			return (1);
 		}
 	}
 	return (0);
 }
 
-int					get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
-	int 			ret;
-	char			buf[BUFF_SIZE + 1];
-	static char		*save;
+	int			ret;
+	char		buf[BUFF_SIZE + 1];
+	static char	*save;
 
 	if (checkendofline(&save, line))
 		return (1);
@@ -74,9 +74,9 @@ int					get_next_line(const int fd, char **line)
 
 int				main(int ac, char *av[])
 {
-	int 		fd;
+	int			fd;
 	char		*line;
-	int 		i;
+	int			i;
 
 	i = 0;
 	line = NULL;
